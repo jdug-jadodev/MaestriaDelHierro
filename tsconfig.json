@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "lib": ["ES2020", "DOM"],
+    "jsx": "preserve",
+    "allowJs": true,
+    "checkJs": false,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "strict": false,
+    "ignoreDeprecations": "6.0",
+    "types": ["vite/client", "astro/client"]
+  },
+  "include": ["src/**/*", "astro.config.mjs", "src/components/**/*"]
+}

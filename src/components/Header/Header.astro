@@ -1,5 +1,5 @@
 ---
-import Image from "astro/components/Image.astro";
+import { Image } from "astro:assets";
 
 ---
 <header class="flex items-center cursor-pointer justify-between shadow-custom bg-azulPetroleo fixed w-full z-[1000] px-4 sm:px-8 py-2">
@@ -39,48 +39,57 @@ import Image from "astro/components/Image.astro";
   </div>
 </header>
 
-<script>
-    const navLinks = document.querySelectorAll(".nav-link");
-    const logoLink = document.getElementById("logo-link");
-    const menuToggle = document.getElementById("menu-toggle");
-    const navMenu = document.getElementById("nav-menu");
+<script lang="ts">
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
+    const logoLink = document.getElementById("logo-link") as HTMLAnchorElement | null;
+    const menuToggle = document.getElementById("menu-toggle") as HTMLElement | null;
+    const navMenu = document.getElementById("nav-menu") as HTMLElement | null;
 
-    function scrollToSection(targetId) {
+    function scrollToSection(targetId: string | null) {
+      if (!targetId) return;
       const targetSection = document.getElementById(targetId);
       if (targetSection) {
         targetSection.scrollIntoView({ behavior: "smooth" });
       }
     }
 
-    navLinks.forEach(link => {
-      link.addEventListener("click", (event) => {
-        const targetId = link.getAttribute("data-target");
+    if (navLinks && navLinks.length) {
+      navLinks.forEach((link) => {
+        link.addEventListener("click", (event: MouseEvent) => {
+          const targetId = link.getAttribute("data-target");
 
-        if (targetId && document.getElementById(targetId)) {
-          event.preventDefault();
-          scrollToSection(targetId);
+          if (targetId && document.getElementById(targetId)) {
+            event.preventDefault();
+            scrollToSection(targetId);
 
-          if (window.innerWidth < 640) {
-            navMenu.classList.add("hidden");
+            if (window.innerWidth < 640 && navMenu) {
+              navMenu.classList.add("hidden");
+            }
           }
+        });
+      });
+    }
+
+    if (logoLink) {
+      logoLink.addEventListener("click", (event: MouseEvent) => {
+        if (window.location.pathname === "/") {
+          event.preventDefault();
+          scrollToSection("inicio");
         }
       });
-    });
+    }
 
-    logoLink.addEventListener("click", (event) => {
-      if (window.location.pathname === "/") {
-        event.preventDefault();
-        scrollToSection("inicio");
-      }
-    });
+    if (menuToggle && navMenu) {
+      menuToggle.addEventListener("click", (event: MouseEvent) => {
+        navMenu.classList.toggle("hidden");
+        event.stopPropagation(); 
+      });
+    }
 
-    menuToggle.addEventListener("click", (event) => {
-      navMenu.classList.toggle("hidden");
-      event.stopPropagation(); 
-    });
-
-    document.addEventListener("click", (event) => {
-      if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+    document.addEventListener("click", (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (navMenu && menuToggle && !navMenu.contains(target) && !menuToggle.contains(target)) {
         navMenu.classList.add("hidden");
       }
     });

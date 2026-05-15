@@ -1,0 +1,23 @@
+{
+  "modules": [
+    {
+      "name": "src",
+      "path": "src",
+      "includeInstructions": true,
+      "excludePatterns": ["**/*.test.ts", "**/*.spec.ts", "**/__mocks__/**"]
+    }
+  ],
+  "globalInstructions": ".github/copilot-instructions.md",
+  "maxTotalSizeKb": 2048,
+  "cache": {
+    "maxEntries": 5000,
+    "maxEntrySizeKb": 1024
+  },
+  "security": {
+    "allowedPaths": ["./"],
+    "deniedPaths": ["./node_modules", "./dist", "./secrets", "./.git"],
+    "deniedFiles": [".env", "credentials.json", "*.pem"],
+    "maxFileSizeKb": 500,
+    "allowedExtensions": [".ts", ".tsx", ".js", ".jsx", ".json", ".md", ".yaml", ".yml"]
+  }
+}

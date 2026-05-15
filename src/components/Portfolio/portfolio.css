@@ -5,6 +5,10 @@
     grid-template-rows: repeat(6, 14%);
 }
 
+.title-projects{
+    color: #e8a020;
+}
+
 .img-1 {
     grid-column: span 2;
     grid-row: span 4;

@@ -1,119 +1,629 @@
 ---
 import './PortfolioGallery.css'
 import { Image } from "astro:assets";
+
+const imageFiles = [
+  'baranda balcon.webp',
+  'baranda de seguirdad interna.webp',
+  'baranda de seguridad.webp',
+  'barandilla de seguridad interna.webp',
+  'barandilla Larga.webp',
+  'barandilla.webp',
+  'barandillaDeSeguridad.webp',
+  'cortinaPanPa_Ya.webp',
+  'cortinaPopsy.webp',
+  'cubierta peatonal.webp',
+  'domo cubierta peatonal.webp',
+  'domo grande policarbonato.webp',
+  'domo paso peatonal.webp',
+  'domo.webp',
+  'escalera.webp',
+  'escaleraAlta.webp',
+  'escaleraDelgada.webp',
+  'escaleraFlotante.webp',
+  'escaleraGruesa.webp',
+  'gimnasio.webp',
+  'parqueInfantil.webp',
+  'porton parte externa.webp',
+  'porton.webp',
+  'portonConjunto.webp',
+  'portonGaraje.webp',
+  'puerta.webp',
+  'puertaCuadros.webp',
+  'puertaNegra.webp',
+  'puertas edificio 2.webp',
+  'puertaYVentanaDeAluminio.webp',
+  'reja de seguirdad.webp',
+  'reja de seguridad externa.webp',
+  'reja electrica.webp',
+  'rejaParaContadorGas.webp',
+  'rejaParaContadorLuz.webp',
+  'rejaPerimetral.webp',
+  'techo.webp',
+  'techoDePolicarbonato.webp',
+  'techoLargoPolicarbonato.webp',
+  'ventanaBlanca.webp',
+].sort();
+
+// Categorías para agrupar los productos
+const categories = {
+  'Barandas & Barandillas': imageFiles.filter(f => f.toLowerCase().includes('baranda') || f.toLowerCase().includes('barandilla')),
+  'Cortinas': imageFiles.filter(f => f.toLowerCase().includes('cortina')),
+  'Cubiertas & Domos': imageFiles.filter(f => f.toLowerCase().includes('cubierta') || f.toLowerCase().includes('domo') || f.toLowerCase().includes('techo')),
+  'Escaleras': imageFiles.filter(f => f.toLowerCase().includes('escalera')),
+  'Portones & Puertas': imageFiles.filter(f => f.toLowerCase().includes('porton') || f.toLowerCase().includes('puerta')),
+  'Rejas': imageFiles.filter(f => f.toLowerCase().includes('reja')),
+  'Ventanas': imageFiles.filter(f => f.toLowerCase().includes('ventana')),
+  'Otros': imageFiles.filter(f =>
+    !f.toLowerCase().includes('baranda') &&
+    !f.toLowerCase().includes('barandilla') &&
+    !f.toLowerCase().includes('cortina') &&
+    !f.toLowerCase().includes('cubierta') &&
+    !f.toLowerCase().includes('domo') &&
+    !f.toLowerCase().includes('techo') &&
+    !f.toLowerCase().includes('escalera') &&
+    !f.toLowerCase().includes('porton') &&
+    !f.toLowerCase().includes('puerta') &&
+    !f.toLowerCase().includes('reja') &&
+    !f.toLowerCase().includes('ventana')
+  ),
+};
+
+function titleFromFilename(name: string) {
+  return name
+    .replace(/\.[^.]+$/, '')
+    .replace(/[-_\.]/g, ' ')
+    .replace(/\b(\w)/g, (s: string) => s.toUpperCase());
+}
 ---
 
-<section id="portfolio" class="w-full bg-azulPetroleo flex flex-col items-center justify-center ">
-    <ul class="w-[90%] containerPortfolio text-white">
+<section id="portfolio" class="portfolio-section">
 
-        <li class="image-1 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/barandilla.webp" width={100} height={100} loading="eager" alt="Barandilla pequeña para escalera" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full  h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[20px] font-bold">Pasamanos pequeña para escalera</h3>
-                </div>
+  <!-- Header decorativo -->
+  <div class="portfolio-header">
+    <div class="header-eyebrow">
+      <span class="eyebrow-line"></span>
+      <span class="eyebrow-text">Nuestro Trabajo</span>
+      <span class="eyebrow-line"></span>
+    </div>
+    <h2 class="portfolio-title">Portafolio</h2>
+    <p class="portfolio-subtitle">Soluciones en metal, aluminio y policarbonato con estándares de calidad superiores</p>
+  </div>
+
+  <!-- Filtros de categoría -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">Todos</button>
+    {Object.keys(categories).map(cat => (
+      <button class="filter-btn" data-filter={cat}>{cat}</button>
+    ))}
+  </div>
+
+  <!-- Galería principal -->
+  <div class="gallery-grid" id="gallery">
+    {imageFiles.map((file, i) => {
+      const category = Object.entries(categories).find(([_, files]) => files.includes(file))?.[0] ?? 'Otros';
+      return (
+        <article class="gallery-card" data-category={category} data-index={i}>
+          <div class="card-image-wrap">
+            <Image
+              class="card-image"
+              src={`/assets/${file}`}
+              width={640}
+              height={480}
+              loading={i < 12 ? "eager" : "lazy"}
+              alt={titleFromFilename(file)}
+            />
+            <div class="card-overlay">
+              <div class="overlay-content">
+                <span class="overlay-category">{category}</span>
+                <h3 class="overlay-title">{titleFromFilename(file)}</h3>
+                <button class="overlay-cta" data-src={`/assets/${file}`} data-title={titleFromFilename(file)}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                  </svg>
+                  Ver detalle
+                </button>
+              </div>
             </div>
-        </li>
+          </div>
+          <div class="card-footer">
+            <span class="card-number">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="card-title">{titleFromFilename(file)}</h3>
+            <span class="card-tag">{category}</span>
+          </div>
+        </article>
+      );
+    })}
+  </div>
 
-        <li class="image-2 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/cortinaPanPa_Ya.webp" width={100} height={100} loading="eager" alt="Cortina para Pan Pa' Ya" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[30px] font-bold">Cortina para Pan Pa' Ya</h3>
-                </div>
-            </div>
-        </li>
+  <!-- Contador de resultados -->
+  <div class="results-count">
+    <span id="visible-count">{imageFiles.length}</span> productos mostrados
+  </div>
 
-        <li class="image-3 relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/cortinaPopsy.webp" width={100} height={100} loading="eager" alt="Cortina para Popsy" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[8px] md:text-[16px] lg:text-[30px] font-bold">Cortina para Popsy</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-4 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/puertaCuadros.webp" width={100} height={100} loading="eager" alt="Puerta gruesa" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[30px] font-bold">Puerta doble chapa</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-5 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/portonConjunto.webp" width={100} height={100} loading="eager" alt="Reja de seguridad" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[30px] font-bold">Porton para garaje de conjunto</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-6 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/rejaPerimetral.webp" width={100} height={100} loading="eager" alt="Reja perimetral para conjunto" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[30px] font-bold">Reja perimetral para conjunto</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-7 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/barandillaDeSeguridad.webp" width={100} height={100} loading="eager" alt="Escalera gruesa" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[20px] font-bold">Barandilla para altillo</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-8 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/barandillaLarga.webp" width={100} height={100} loading="eager" alt="Escalera gruesa" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[30px] font-bold">Pasamanos de seguridad</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-9 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/escaleraGruesa.webp" width={100} height={100} loading="eager" alt="Escalera gruesa" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[14px] md:text-[16px] lg:text-[20px] font-bold">Escalera flotante</h3>
-                </div>
-            </div>
-        </li>
-
-        
-        <li class="image-10 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/rejaParaContadorGas.webp" width={100} height={100} loading="eager" alt="Techo largo en policarbonato" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[12px] md:text-[14px] lg:text-[20px] font-bold">Rejilla para contador de gas</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-11 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/rejaParaContadorLuz.webp" width={100} height={100} loading="eager" alt="Techo largo en policarbonato" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[12px] md:text-[14px] lg:text-[20px] font-bold">Rejilla para contador de luz</h3>
-                </div>
-            </div>
-        </li>
-
-        <li class="image-12 border-[1px] border-borde relative overflow-hidden rounded-lg cursor-pointer">
-            <Image class="w-full h-full target-image object-cover" src="/assets/techoLargoPolicarbonato.webp" width={100} height={100} loading="eager" alt="Techo largo en policarbonato" />
-            <div class="w-full inset-0 h-full container-info">
-                <div class="inset-0 w-full h-3/6 p-2 bg-black/70 absolute tarjet flex flex-col">
-                    <h3 class="text-[12px] md:text-[14px] lg:text-[26px] font-bold">Techo largo en policarbonato</h3>
-                </div>
-            </div>
-        </li>
-
-    </ul> 
 </section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Cerrar">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+  <div class="lightbox-inner">
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+    <div class="lightbox-info">
+      <p class="lightbox-title" id="lightbox-title"></p>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ─── TOKENS ─────────────────────────────────────────── */
+  :root {
+    --c-bg:       #0a0f1a;
+    --c-surface:  #111827;
+    --c-border:   rgba(255,255,255,0.08);
+    --c-accent:   #e8a020;
+    --c-accent2:  #f0c040;
+    --c-text:     #f0f4ff;
+    --c-muted:    #6b7280;
+    --c-card-bg:  #141b2d;
+    --radius:     12px;
+    --transition: 0.38s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ─── SECTION ─────────────────────────────────────────── */
+  .portfolio-section {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--c-bg);
+    padding: 80px 24px 100px;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* fondo con patrón de rejilla sutil */
+  .portfolio-section::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────────── */
+  .portfolio-header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .header-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .eyebrow-line {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--c-accent));
+  }
+
+  .eyebrow-line:last-child {
+    background: linear-gradient(90deg, var(--c-accent), transparent);
+  }
+
+  .eyebrow-text {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+  }
+
+  .portfolio-title {
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    color: var(--c-text);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    background: linear-gradient(135deg, #fff 40%, var(--c-accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .portfolio-subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--c-muted);
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ─── FILTROS ─────────────────────────────────────────── */
+  .filter-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+
+  .filter-btn {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-muted);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.02em;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--c-accent);
+    color: var(--c-text);
+  }
+
+  .filter-btn.active {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: #000;
+    font-weight: 700;
+  }
+
+  /* ─── GRID ─────────────────────────────────────────── */
+  .gallery-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  /* ─── CARD ─────────────────────────────────────────── */
+  .gallery-card {
+    background: var(--c-card-bg);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    will-change: transform;
+    animation: cardReveal 0.5s ease both;
+  }
+
+  .gallery-card:nth-child(1)  { animation-delay: 0.02s }
+  .gallery-card:nth-child(2)  { animation-delay: 0.04s }
+  .gallery-card:nth-child(3)  { animation-delay: 0.06s }
+  .gallery-card:nth-child(4)  { animation-delay: 0.08s }
+  .gallery-card:nth-child(5)  { animation-delay: 0.10s }
+  .gallery-card:nth-child(6)  { animation-delay: 0.12s }
+  .gallery-card:nth-child(7)  { animation-delay: 0.14s }
+  .gallery-card:nth-child(8)  { animation-delay: 0.16s }
+  .gallery-card:nth-child(n+9) { animation-delay: 0.18s }
+
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(24px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .gallery-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5), 0 0 0 1px var(--c-accent);
+    border-color: var(--c-accent);
+  }
+
+  .gallery-card.hidden {
+    display: none;
+  }
+
+  /* ─── IMAGEN ─────────────────────────────────────────── */
+  .card-image-wrap {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .gallery-card:hover .card-image {
+    transform: scale(1.07);
+  }
+
+  /* ─── OVERLAY ─────────────────────────────────────────── */
+  .card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity var(--transition);
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .gallery-card:hover .card-overlay {
+    opacity: 1;
+  }
+
+  .overlay-content {
+    padding: 20px;
+    transform: translateY(10px);
+    transition: transform var(--transition);
+    width: 100%;
+  }
+
+  .gallery-card:hover .overlay-content {
+    transform: translateY(0);
+  }
+
+  .overlay-category {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 6px;
+  }
+
+  .overlay-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 14px;
+    line-height: 1.3;
+  }
+
+  .overlay-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--c-accent);
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .overlay-cta:hover {
+    background: var(--c-accent2);
+  }
+
+  /* ─── CARD FOOTER ─────────────────────────────────────── */
+  .card-footer {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-top: 1px solid var(--c-border);
+  }
+
+  .card-number {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--c-accent);
+    font-variant-numeric: tabular-nums;
+    opacity: 0.7;
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--c-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+  }
+
+  .card-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--c-muted);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--c-border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── CONTADOR ─────────────────────────────────────────── */
+  .results-count {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 13px;
+    color: var(--c-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .results-count span {
+    color: var(--c-accent);
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  /* ─── LIGHTBOX ─────────────────────────────────────────── */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .lightbox.open {
+    display: flex;
+    animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0 }
+    to   { opacity: 1 }
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 10000;
+  }
+
+  .lightbox-close:hover {
+    background: var(--c-accent);
+    color: #000;
+    border-color: var(--c-accent);
+  }
+
+  .lightbox-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    max-width: 90vw;
+    max-height: 90vh;
+    animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.88); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+  }
+
+  .lightbox-img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: var(--radius);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.7);
+  }
+
+  .lightbox-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--c-text);
+    letter-spacing: 0.04em;
+    margin: 0;
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .portfolio-section { padding: 48px 16px 64px; }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .card-footer { padding: 10px 12px; }
+    .filter-bar { gap: 8px; }
+    .filter-btn { font-size: 11px; padding: 6px 14px; }
+    .card-tag { display: none; }
+  }
+</style>
+
+<script>
+  const filterBtns = document.querySelectorAll<HTMLButtonElement>('.filter-btn');
+  const cards      = document.querySelectorAll<HTMLElement>('.gallery-card');
+  const countEl    = document.getElementById('visible-count');
+  const lightbox   = document.getElementById('lightbox')!;
+  const lbImg      = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lbTitle    = document.getElementById('lightbox-title')!;
+  const lbClose    = document.getElementById('lightbox-close')!;
+
+  // ── FILTROS ──
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter ?? 'all';
+      let visible = 0;
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      if (countEl) countEl.textContent = String(visible);
+    });
+  });
+
+  // ── LIGHTBOX ──
+  document.querySelectorAll<HTMLButtonElement>('.overlay-cta').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const src   = btn.dataset.src ?? '';
+      const title = btn.dataset.title ?? '';
+      lbImg.src        = src;
+      lbImg.alt        = title;
+      lbTitle.textContent = title;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  // También al hacer clic en la card completa
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const btn = card.querySelector<HTMLButtonElement>('.overlay-cta');
+      if (btn) btn.click();
+    });
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  lbClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>

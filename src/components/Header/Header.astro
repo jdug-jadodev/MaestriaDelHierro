@@ -22,12 +22,12 @@ import { Image } from "astro:assets";
   
   <div>
     <!-- Botón del menú hamburguesa (aparece en móviles) -->
-    <button id="menu-toggle" class="cursor-pointer sm:hidden text-white text-[24px] bg-azulPetroleo">
+    <button id="menu-toggle" class="sm:hidden text-white text-[24px] bg-azulPetroleo p-2" aria-label="Abrir menú">
       ☰
     </button>
 
     <!-- Menú de navegación -->
-    <nav id="nav-menu" class="cursor-pointer hidden sm:flex absolute sm:relative right-0 bg-azulPetroleo w-full sm:w-auto flex-col sm:flex-row text-center">
+    <nav id="nav-menu" class="hidden sm:flex sm:static fixed left-0 right-0 top-16 sm:top-auto bg-azulPetroleo w-full sm:w-auto flex-col sm:flex-row text-center z-40">
       <ul class="flex flex-col sm:flex-row text-grisClaro text-[18px] sm:text-[18px] lg:text-[20px] md:gap-x-8 sm:gap-10 p-4 sm:p-0 font-roboto">
         <li><a href="/" data-target="inicio">Inicio</a></li>
         <li><a href="/#servicios" class="nav-link" data-target="servicios">Servicios</a></li>
@@ -39,13 +39,15 @@ import { Image } from "astro:assets";
   </div>
 </header>
 
-<script lang="ts">
-    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
-    const logoLink = document.getElementById("logo-link") as HTMLAnchorElement | null;
-    const menuToggle = document.getElementById("menu-toggle") as HTMLElement | null;
-    const navMenu = document.getElementById("nav-menu") as HTMLElement | null;
+<script is:inline>
+  // Esperar a que el DOM esté listo
+  function initMenu() {
+    const navLinks = document.querySelectorAll(".nav-link");
+    const logoLink = document.getElementById("logo-link");
+    const menuToggle = document.getElementById("menu-toggle");
+    const navMenu = document.getElementById("nav-menu");
 
-    function scrollToSection(targetId: string | null) {
+    function scrollToSection(targetId) {
       if (!targetId) return;
       const targetSection = document.getElementById(targetId);
       if (targetSection) {
@@ -53,9 +55,10 @@ import { Image } from "astro:assets";
       }
     }
 
+    // Cerrar menú cuando hace click en un link
     if (navLinks && navLinks.length) {
       navLinks.forEach((link) => {
-        link.addEventListener("click", (event: MouseEvent) => {
+        link.addEventListener("click", (event) => {
           const targetId = link.getAttribute("data-target");
 
           if (targetId && document.getElementById(targetId)) {
@@ -70,8 +73,9 @@ import { Image } from "astro:assets";
       });
     }
 
+    // Logo link scroll
     if (logoLink) {
-      logoLink.addEventListener("click", (event: MouseEvent) => {
+      logoLink.addEventListener("click", (event) => {
         if (window.location.pathname === "/") {
           event.preventDefault();
           scrollToSection("inicio");
@@ -79,18 +83,28 @@ import { Image } from "astro:assets";
       });
     }
 
+    // Toggle menú al hacer click en el botón hamburguesa
     if (menuToggle && navMenu) {
-      menuToggle.addEventListener("click", (event: MouseEvent) => {
+      menuToggle.addEventListener("click", (event) => {
+        event.stopPropagation();
         navMenu.classList.toggle("hidden");
-        event.stopPropagation(); 
       });
     }
 
-    document.addEventListener("click", (event: MouseEvent) => {
-      const target = event.target;
-      if (!(target instanceof Node)) return;
-      if (navMenu && menuToggle && !navMenu.contains(target) && !menuToggle.contains(target)) {
-        navMenu.classList.add("hidden");
+    // Cerrar menú cuando hace click fuera
+    document.addEventListener("click", (event) => {
+      if (navMenu && menuToggle) {
+        if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+          navMenu.classList.add("hidden");
+        }
       }
     });
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMenu);
+  } else {
+    initMenu();
+  }
 </script>

@@ -1,66 +1,92 @@
 ---
 import "./OurServices.css";
 import { Image } from "astro:assets";
+
+const images = [
+  { src: "/assets/escaleraGruesa.webp",   alt: "Estructura Pesada",      label: "Estructura" },
+  { src: "/assets/puertaNegra.webp",       alt: "Portón",                 label: "Portones" },
+  { src: "/assets/ventanaBlanca.webp",     alt: "Ventana",                label: "Ventanas" },
+  { src: "/assets/gimnasio.webp",          alt: "Gimnasio",               label: "Gimnasio" },
+  { src: "/assets/puertaCuadros.webp",     alt: "Puerta Cuadros",         label: "Puertas" },
+  { src: "/assets/escaleraFlotante.webp",  alt: "Escalera Flotante",      label: "Escaleras" },
+  { src: "/assets/portonConjunto.webp",    alt: "Portón Conjunto",        label: "Conjuntos" },
+  { src: "/assets/escaleraAlta.webp",      alt: "Escalera Alta",          label: "Escaleras" },
+  { src: "/assets/portonGaraje.webp",      alt: "Portón Garaje",          label: "Garajes" },
+];
+
+const services = [
+  "Ventanas & Puertas",
+  "Portones Eléctricos",
+  "Marquesinas & Techos",
+  "Escaleras",
+  "Rejas & Barandas",
+  "Estructura Liviana y Pesada",
+];
 ---
 
-<section id="servicios" class="w-full bg-azulPetroleo py-12 md:py-16">
-  <div class="w-full flex flex-col md:flex-row items-center gap-8 lg:gap-12 xl:gap-16">
-    <article class="flex-1 px-4 md:text-left service md:ml-10">
-      <h2 class="text-3xl flex flex-col text-center sm:text-4xl md:text-5xl lg:text-6xl font-bold font-raleway text-grisOscuro leading-tight">
-        Servicio dentro y fuera de
-        <span class="text-yellow inline-block mt-2 md:mt-4">Bogotá</span>
+<section id="servicios" class="services-section">
+
+  <!-- Línea decorativa superior -->
+  <div class="section-rule">
+    <span class="rule-dot"></span>
+    <span class="rule-line"></span>
+    <span class="rule-label">Servicios</span>
+    <span class="rule-line"></span>
+    <span class="rule-dot"></span>
+  </div>
+
+  <div class="services-inner">
+
+    <!-- COLUMNA TEXTO -->
+    <article class="services-text">
+      <p class="services-eyebrow">Fabricación especializada</p>
+      <h2 class="services-heading">
+        Servicio dentro<br>
+        y fuera de<br>
+        <em class="services-highlight">Bogotá</em>
       </h2>
-      <p class="text-base flex text-center sm:text-xl md:text-1xl lg:text-3xl text-grisOscuro mt-4 md:mt-6 lg:mt-8">
-        Fabricamos ventanas, portones eléctricos, marquesinas, puertas de seguridad, estructura liviana, pesada, cortinas, techos y todo lo relacionado con la rama.
+
+      <p class="services-body">
+        Fabricamos ventanas, portones eléctricos, marquesinas, puertas de seguridad,
+        estructura liviana, pesada, cortinas, techos y todo lo relacionado con la rama.
       </p>
+
+      <!-- Lista de servicios con icono -->
+      <ul class="services-list">
+        {services.map(s => (
+          <li class="services-list-item">
+            <span class="list-bullet" aria-hidden="true"></span>
+            {s}
+          </li>
+        ))}
+      </ul>
+
+      <a href="#portfolio" class="services-cta">
+        Ver portafolio completo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
     </article>
-    <div class="flex-shrink-0 w- md:w-[60%] lg:w-[50%] px-4 md:mr-8">
-        <article class="grid wrapper grid-cols-3 gap-2 sm:gap-3 w-full max-w-[820px] mx-auto">
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/escaleraGruesa.webp" alt="Estructura Pesada" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="eager" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
+
+    <!-- COLUMNA GALERÍA -->
+    <div class="services-gallery">
+      <div class="gallery-mosaic">
+        {images.map((img, i) => (
+          <div class={`mosaic-cell cell-${i + 1}`}>
+            <Image
+              src={img.src}
+              alt={img.alt}
+              width={400}
+              height={400}
+              class="mosaic-img"
+              loading={i < 3 ? "eager" : "lazy"}
+            />
+            <span class="mosaic-label">{img.label}</span>
           </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/puertaNegra.webp" alt="Portón" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="eager" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/ventanaBlanca.webp" alt="Puerta 1" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="eager" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/gimnasio.webp" alt="Ventana Cuadrada" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="lazy" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/puertaCuadros.webp" alt="Ventana" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="lazy" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/escaleraFlotante.webp" alt="Escalera flotante" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="lazy" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/portonConjunto.webp" alt="Porton para conjunto" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="lazy" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/escaleraAlta.webp" alt="Escalera alta" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="lazy" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-    
-          <div class="images-example aspect-square relative overflow-hidden transition-transform duration-300 hover:scale-[1.03]">
-            <Image src="/assets/portonGaraje.webp" alt="Reja de garaje" width={100} height={100} class="w-full h-full object-cover rounded-lg shadow-lg" loading="lazy" />
-            <div class="absolute inset-0 bg-black/20 hover:bg-black/30 transition-colors"></div>
-          </div>
-        </article>
+        ))}
+      </div>
     </div>
+
   </div>
 </section>

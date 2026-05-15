@@ -6,6 +6,7 @@
     transform: translateX(50%);
     opacity: 40%;
     transition: ease 0.5s;
+    color: #f0f4ff;
 }
 
 .text-about{
@@ -15,6 +16,7 @@
     transform: translateX(-30%);
     opacity: 0;
     transition: ease 0.5s;
+    color: #f0f4ff;
 }
 
 .text-second{
@@ -31,4 +33,7 @@
     transform: translateX(0);
     transition: ease 1s;
     opacity: 1;
+}
+.us{
+    color: #e8a020;
 }

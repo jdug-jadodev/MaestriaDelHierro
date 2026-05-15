@@ -4,6 +4,10 @@
     overflow: hidden;
 }
 
+.age{
+    color: #e8a020;
+}
+
 .hero-image {
     width: 100%;
     height: 100%;
@@ -27,6 +31,7 @@
     font-size: clamp(1.5rem, 8vw, 98px);
     line-height: 1;
     white-space: nowrap;
+    color: #f0f4ff;
 }
 
 .plus {
@@ -43,6 +48,7 @@
     font-size: clamp(1.2rem, 6vw, 64px);
     margin-top: clamp(0.2rem, 4vw, 4rem);
     margin-left: clamp(0.5rem, 2vw, 1.5rem);
+    color: #f0f4ff;
 }
 
 /* Responsive para móviles */
